@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>字典表</title>
+	<link rel="stylesheet" type="text/css" href="../EasyUI/themes/default/easyui.css">
+	<link rel="stylesheet" type="text/css" href="../EasyUI/themes/icon.css">
+	<script type="text/javascript" src="../EasyUI/jquery.min.js"></script>
+	<script type="text/javascript" src="../EasyUI/jquery.easyui.min.js"></script>
+	<script type="text/javascript" src="../js/myjs/easyuiEdit.js"></script>
+</head>
+<body>
+	<div id="tb" style="height:auto">
+		<a href="javascript:void(0)" class="easyui-linkbutton" data-options="plain:true">组名称:</a>
+		<input id="ccc" class="easyui-textbox" data-options="width:'120px'">
+		<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true" onclick="query()">查询</a>
+		<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="append()">添加</a>
+		<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="removeit()">删除</a>
+		<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-save',plain:true" onclick="accept()">保存</a>
+		<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-undo',plain:true" onclick="reject()">取消</a>
+		<input id="cccc" class="easyui-textbox" data-options="width:'120px',readonly:true,disabled:true">
+		<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-redo',plain:true" onclick="updateCache()">更新缓存</a>
+	</div>
+	<table id="mainTableId"  title="服务列表" style="height:auto">
+	</table>
+
+	
+	
+<script type="text/javascript">
+	$('#ccc').textbox()
+	function query(){
+		$('#mainTableId').datagrid({
+			"singleSelect":true,
+		 	"fitColumns":true,
+			"pagination":false,
+			"nowrap":true,
+			"fitColumns":true,
+			"pagination":true,
+			"toolbar":'#tb',
+			queryParams:{
+				"strGroupName_like":$("#ccc").textbox("getValue")
+			},
+			pageSize:40,
+			"onDblClickCell":onDBClick,
+			"url":'../../apolloData/dict/get.cdo',
+		    columns:[[
+		    	{field:'lId',width:100,title:'lId'},
+				{field:'strMode',width:100,title:'资方id',editor:getFundCombo()},
+				{field:'strGroupName',width:100,title:'组名称',editor:'text'},
+				{field:'strName',width:100,title:'名称',editor:'text'},
+				{field:'strFieldName',width:100,title:'字段名称',editor:'text'},
+				{field:'strValue',width:100,title:'字段值',editor:'text'},
+				{field:'srConstraint',width:100,title:'约束',editor:'text'},
+				{field:'strMsg',width:100,title:'描述',editor:'text'},
+				{field:'strState',width:100,title:'状态',editor:getDictCombo("CONST_FLAG_TYPE",null)},
+				{field:'dtCreateTime',width:100,title:'创建时间'}
+		    ]]
+		});
+	}
+	
+	function updateCache(){
+		$.post("../../apolloData/dict/updateCache.cdo?strFieldName=CacheTime",{},function(data){
+			$.post("../../apolloData/dict/get.cdo?strFieldName=CacheTime",{},function(data){
+				$("#cccc").textbox("setValue",data.rows[0].strValue);
+			})
+		});
+	}
+	$(function(){
+		//加载缓存值
+		$.post("../../apolloData/dict/get.cdo?strFieldName=CacheTime",{},function(data){
+			$("#cccc").textbox("setValue",data.rows[0].strValue);
+		});
+		query();
+	})
+	
+	mainTableId = 'mainTableId';
+	editIndex = undefined;
+	editFlag = undefined;
+	//删除数据
+	function removeit(){
+		var d = $('#'+mainTableId).datagrid('getSelected');
+		if( d == null){
+			showMsg("请选择一行数据");
+			return;
+		}
+		var url="../../apolloData/dict/del.cdo";
+		showConfirm(function(){
+			syncAjax(url,{"lId":d.lId},function(obj){
+				if(obj.code == 0 ){
+					showMsg("删除成功");
+				}else{
+					showMsg(obj.msg);
+				}
+			});
+			$('#'+mainTableId).datagrid("reload");
+		});
+	}
+	
+	//保存数据
+	function accept(){
+		if(editIndex == undefined || editIndex < 0 ){
+			showMsg("请编辑或添加一行数据");
+			return;
+		}
+		$('#'+mainTableId).datagrid('selectRow', editIndex)
+		.datagrid('endEdit', editIndex);
+		
+		var rows = $('#'+mainTableId).datagrid('getRows');    // get current page rows
+		var data = rows[editIndex];   
+		if(data == null){
+			showMsg("添加的数据为空");
+			$('#'+mainTableId).datagrid("reload");
+			return;
+		}
+		
+		var url ;
+		if(editFlag){
+			url = "../../apolloData/dict/update.cdo"
+		}else{
+			url = "../../apolloData/dict/save.cdo"
+		}
+		try{
+			syncAjax(url,data,function(obj){
+				if(obj.code == 0 ){
+					showMsg("成功");
+				}else{
+					showMsg(obj.msg);
+				}
+			},function(a,b,c){
+				if(b.indexOf("error") != -1){
+					showMsg("数据保存失败,请重试");
+				}
+			});
+		}finally{
+			editIndex = undefined;
+			editFlag = undefined;
+		}
+		$('#'+mainTableId).datagrid("reload");
+	}
+	//双击选择编辑的行
+	function onDBClick(index, field){
+		if(editIndex == undefined){
+			$('#'+mainTableId).datagrid('selectRow', index).datagrid('beginEdit', index);
+			editIndex = index;
+			editFlag = true;
+		}
+	}
+	
+	//添加新的行
+	function append(){
+		if(editIndex == undefined){
+			$('#'+mainTableId).datagrid('appendRow',{});
+			editIndex = $('#'+mainTableId).datagrid('getRows').length-1;
+			$('#'+mainTableId).datagrid('selectRow', editIndex)
+					.datagrid('beginEdit', editIndex);
+			editFlag = false;
+		}
+	}
+	
+	//取消编辑
+	function reject(){
+		$('#'+mainTableId).datagrid('rejectChanges');
+		editIndex = undefined;
+	}
+
+</script>
+</body>
+</html>
