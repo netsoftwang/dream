@@ -1,4 +1,4 @@
-com\palace\hg\PPUtils.class
 com\palace\hg\AppListener.class
-com\palace\hg\UserService.class
 com\palace\hg\Bootstrap.class
+com\palace\hg\PPUtils.class
+com\palace\hg\UserService.class
