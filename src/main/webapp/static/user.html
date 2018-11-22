@@ -131,11 +131,21 @@ $(function(){
 				if($("input[name="+key+"]").attr("type") == "text"){
 					$("input[name="+key+"]").val(val);
 				}else{
+<<<<<<< HEAD
 					if(val != ""){
 						if(jObj.attr("flag") == "select"){
 							$("#"+key+"Id").find("option[value="+val+"]").attr("selected",true);
 	
 						}
+=======
+					if(ele.attr("type") == "radio"){
+						//ele.attr("checked",false);
+					}else{
+						if(key == "strYinShui" || key=="strWuChan"){
+							$("input[name="+key+"] option[text='"+val+"']").attr("selected", true);
+						}
+						ele.val(val);
+>>>>>>> branch 'master' of git@github.com:netsoftwang/dream.git
 					}
 				}
 			}
