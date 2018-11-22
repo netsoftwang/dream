@@ -27,6 +27,7 @@ $(function(){
 	pingXue(false);
 	zhiFangGan(false);
 	initDate("yueJingId");
+<<<<<<< HEAD
 	
 	$("#submitId").click(function(){
 		var data = $("#formId").serialize();
@@ -373,6 +374,331 @@ function xueYa(val){
 				<div class="input-group input-group-sm">
 					<span class="input-group-addon" id="">胸围</span>
 					<input type="text" name="lXiongWei" class="form-control" placeholder="" aria-describedby="basic-addon1">
+=======
+	$("#submitId").click(function(){
+		var data = $("#formId").serialize();
+		console.log(data);
+		$.post("../cus/saveCus",data,function(rs){
+			console.log(rs);
+			if(rs.code != 0 ){
+				msg(rs.msg); 
+			}else{
+				msg("二萌期待与您共同见证，42天后您开挂般的人生。");
+			}
+		});
+	});
+	$("#strPhoneId").keup(function(){
+		var strPhone = $(this).val();
+		$.post(strPhone,"../cus/getByPhone",function(rs){
+			if(rs.code != 0){
+				return;
+			}
+			var obj = rs.data;
+			if(ojb['strZhiFangGan'] == "true"){
+				zhiFangGan(true);
+			}
+			if(ojb['strPingXue'] == "true"){
+				pingXue(true);	
+			}
+			if(ojb['strTangNiaoBing'] == "true"){
+				tangNiaoBing(true);
+			}
+			if(ojb['strBianMi'] == "true"){
+				bianMi(true);
+			}
+			if(ojb['strGaoXueYa'] == "true"){
+				xueYa(true);
+			}
+			if(ojb['strJianFei'] == "true"){
+				jianFeiExt(true);
+			}
+			for(var key : obj){
+				$("input[name=strZhiFangGan]").val(obj[key]);
+			}
+		})
+	})
+})
+
+function initDate(lId){
+	$("#"+lId).datetimepicker({
+		format: 'yyyy-mm-dd',//显示格式
+		todayHighlight: 1,//今天高亮
+		minView: "month",//设置只显示到月份
+		startView:2,
+		forceParse: 0,
+		showMeridian: 1,
+		autoclose: 1//选择后自动关闭
+		});
+}
+function msg(msg){
+	$("#concentId").text(msg);
+	 $('#dlgId').modal({"show":true});
+}
+function zhiFangGan(val){
+	var html=
+	'	<div class="row top" id="zhiFangGanExtId">'+
+	'	<div class="col-lg-8">'+
+	'		<div class="input-group input-group-sm">'+
+	'			<span class="input-group-addon" id="">具体内容</span>'+
+	'			<input type="text" name="strZhiFangGanNeiRong" class="form-control" placeholder="" aria-describedby="basic-addon1" >'+
+	'		</div>'+
+	'	</div>'+
+	'</div>';
+	if(val){
+		var jianFeiExtDom = $("#zhiFangGanExtId");
+    	if(jianFeiExtDom.val() === undefined){
+        	$("#zhiFangGanRowId").after(html);
+    	}
+	}else{
+		 $('input[type=radio][name=strZhiFangGan]').change(function() {
+	        if (this.value == "true") {
+	        	var jianFeiExtDom = $("#zhiFangGanExtId");
+	        	if(jianFeiExtDom.val() === undefined){
+		        	$("#zhiFangGanRowId").after(html);
+	        	}
+	        }else if (this.value == "false") {
+	        	$("#zhiFangGanExtId").remove();
+	        }
+	    });
+	}
+}
+function pingXue(val){
+	var html=
+	'		<div class="row top" id="pingXueExtId">'+
+	'	<div class="col-lg-8">'+
+	'		<div class="input-group input-group-sm">'+
+	'			<span class="input-group-addon" id="">当前血红蛋白值</span>'+
+	'			<input type="text" name="strXueHongDanBai" class="form-control" placeholder="" aria-describedby="basic-addon1" >'+
+	'		</div>'+
+	'	</div>'+
+	'</div>';
+	if(val){
+		var jianFeiExtDom = $("#pingXueExtId");
+    	if(jianFeiExtDom.val() === undefined){
+        	$("#pingXueRowId").after(html);
+    	}
+	}else{
+	 $('input[type=radio][name=strPingXue]').change(function() {
+	        if (this.value == "true") {
+	        	var jianFeiExtDom = $("#pingXueExtId");
+	        	if(jianFeiExtDom.val() === undefined){
+		        	$("#pingXueRowId").after(html);
+	        	}
+	        }else if (this.value == "false") {
+	        	$("#pingXueExtId").remove();
+	        }
+	    });
+	}
+}
+//糖尿病
+function tangNiaoBing(val){
+	var html = 
+	'	<div class="row top" id="tangNiaoBingExtId">'+
+	'	<div class="col-lg-4">'+
+	'		<div class="input-group input-group-sm">'+
+	'			<span class="input-group-addon" id="">血糖值</span>'+
+	'			<input type="text" name="strXueTangZhi" class="form-control" placeholder="" aria-describedby="basic-addon1" >'+
+	'		</div>'+
+	'	</div>'+
+	'</div>';
+	if(val){
+		var jianFeiExtDom = $("#tangNiaoBingExtId");
+    	if(jianFeiExtDom.val() === undefined){
+        	$("#tangNiaoBingRowId").after(html);
+    	}
+	}else{
+		 $('input[type=radio][name=strTangNiaoBing]').change(function() {
+	        if (this.value == "true") {
+	        	var jianFeiExtDom = $("#tangNiaoBingExtId");
+	        	if(jianFeiExtDom.val() === undefined){
+		        	$("#tangNiaoBingRowId").after(html);
+	        	}
+	        }else if (this.value == "false") {
+	        	$("#tangNiaoBingExtId").remove();
+	        }
+	    });
+	}
+}
+//便秘
+function bianMi(val){
+	var html=
+		'	<div class="row top" id="bianMiExtId">'+
+		'	<div class="col-lg-4">'+
+		'		<div class="input-group input-group-sm">'+
+		'			<span class="input-group-addon" id="">多少天一次</span>'+
+		'			<input type="text" name="strBianMiTianShu" class="form-control" placeholder="" aria-describedby="basic-addon1" >'+
+		'		</div>'+
+		'	</div>'+
+		'</div>';
+	if(val){
+		var jianFeiExtDom = $("#bianMiExtId");
+    	if(jianFeiExtDom.val() === undefined){
+        	$("#bianMiRowId").after(html);
+    	}
+	}else{
+	 $('input[type=radio][name=strBianMi]').change(function() {
+	        if (this.value == "true") {
+	        	var jianFeiExtDom = $("#bianMiExtId");
+	        	if(jianFeiExtDom.val() === undefined){
+		        	$("#bianMiRowId").after(html);
+	        	}
+	        }else if (this.value == "false") {
+	        	$("#bianMiExtId").remove();
+	        }
+	    });
+	}
+}
+
+//血压
+function xueYa(val){
+	var html=
+	'	<div class="row top" id="gaoXueYaExtId">'+
+	'	<div class="col-lg-4">'+
+	'		<div class="input-group input-group-sm">'+
+	'			<span class="input-group-addon" id="">最高血压</span>'+
+	'			<input type="text" name="strZuiGaoXueYa" class="form-control" placeholder="" aria-describedby="basic-addon1" >'+
+	'		</div>'+
+	'	</div>'+
+	'	<div class="col-lg-4">'+
+	'		<div class="input-group input-group-sm">'+
+	'			<span class="input-group-addon" id="">最低血压</span>'+
+	'			<input type="text" name="strZuiDiXueYa" class="form-control" placeholder="" aria-describedby="basic-addon1" >'+
+	'		</div>'+
+	'	</div>'+
+	'</div>';
+	if(val){
+        if (this.value == "true") {
+	       	var jianFeiExtDom = $("#gaoXueYaExtId");
+	       	if(jianFeiExtDom.val() === undefined){
+        	$("#xueYaRowId").after(html);
+       	}
+	}else{
+		 $('input[type=radio][name=strGaoXueYa]').change(function() {
+	        if (this.value == "true") {
+	        	var jianFeiExtDom = $("#gaoXueYaExtId");
+	        	if(jianFeiExtDom.val() === undefined){
+		        	$("#xueYaRowId").after(html);
+	        	}
+	        }else if (this.value == "false") {
+	        	$("#gaoXueYaExtId").remove();
+	        }
+	    });
+	}
+}
+function jianFeiExt(val){
+	var html=		
+		'<div class="row top" id="jianFeiExtId">'+
+		'	<div class="col-lg-2">'+
+		'	<div class="input-group input-group-sm">'+
+		'		<span class="input-group-addon" >名称</span>'+
+		'		<input type="text" name="strProductName" class="form-control" placeholder="" aria-describedby="basic-addon1" >'+
+		'	</div>'+
+		'</div>'+
+		'<div class="col-lg-2">'+
+		'	<div class="input-group input-group-sm">'+
+		'		<span class="input-group-addon" >开始时间</span>'+
+		'		<input type="text" name="strStartTime" id="startTimeId" class="form-control" placeholder="" aria-describedby="basic-addon1" >'+
+		'	</div>'+
+		'</div>'+
+		'<div class="col-lg-2">'+
+		'	<div class="input-group input-group-sm">'+
+				'<span class="input-group-addon" >结束时间</span>'+
+				'<input type="text" name="strEndTime" id="endTimeId" class="form-control" placeholder="" aria-describedby="basic-addon1" >'+
+			'</div>'+
+		'</div>'+
+		'</div>';
+	if(val){
+		var jianFeiExtDom = $("#jianFeiExtId");
+    	if(jianFeiExtDom.val() === undefined){
+        	$("#jianFeiRowId").after(html);
+        	initDate("endTimeId");
+        	initDate("startTimeId");
+    	}
+	}else{
+		 $('input[type=radio][name=strJianFei]').change(function() {
+	        if (this.value == "true") {
+	        	var jianFeiExtDom = $("#jianFeiExtId");
+	        	if(jianFeiExtDom.val() === undefined){
+		        	$("#jianFeiRowId").after(html);
+		        	initDate("endTimeId");
+		        	initDate("startTimeId");
+	        	}
+	        }else if (this.value == "false") {
+	        	$("#jianFeiExtId").remove();
+	        }
+	    });
+	}
+}
+
+</script>
+</head>
+<body>
+<div id ="dlgId" class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">提示</h4>
+      </div>
+      <div class="modal-body">
+        <p id="concentId"></p>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<div class="container middle">
+	<form action="" style="margin-top:20px" id="formId">
+		<div class="row top">
+			<div class="col-lg-8">
+				<div class="input-group input-group-sm">
+					<span class="input-group-addon" id="">姓名</span>
+					<input type="text" name="strUserName" class="form-control" placeholder="" aria-describedby="basic-addon1" >
+				</div>
+			</div>
+		</div>
+		<div class="row top">
+			<div class="col-lg-8">
+				<div class="input-group input-group-sm">
+					<span class="input-group-addon" id="">电话</span>
+					<input type="text"  id="strPhoneId" name="strPhone" class="form-control" placeholder="" aria-describedby="basic-addon1">
+				</div>
+			</div>
+		</div>
+	 	<div class="row top">
+			<div class="col-lg-2">
+				<div class="input-group input-group-sm">
+					<span class="input-group-addon" id="">身高</span>
+					<input type="text"  name="lHeight" class="form-control" placeholder="" aria-describedby="basic-addon1">
+					 <div class="input-group-addon">cm</div>
+				</div>
+			</div>
+			<div class="col-lg-2">
+				<div class="input-group input-group-sm">
+					<span class="input-group-addon" id="">体重</span>
+					<input type="text"  name="lWeight" class="form-control" placeholder="" aria-describedby="basic-addon1">
+					<div class="input-group-addon">kg</div>
+				</div>
+			</div>
+			<div class="col-lg-2">
+				<div class="input-group input-group-sm">
+					<span class="input-group-addon" id="">bmi</span>
+					<input type="text"  name="lBMI" class="form-control" placeholder="" aria-describedby="basic-addon1">
+				</div>
+			</div>
+			<div class="col-lg-2">
+				<div class="input-group input-group-sm">
+					<span class="input-group-addon" id="">理想体重</span>
+					<input type="text"  name="lWantWeight" class="form-control" placeholder="" aria-describedby="basic-addon1">
+					<div class="input-group-addon">kg</div>
+				</div>
+			</div>
+		</div>
+		<div class="row top">
+			<div class="col-lg-2">
+				<div class="input-group input-group-sm">
+					<span class="input-group-addon" id="">胸围</span>
+					<input type="text" name"lXiongWei" class="form-control" placeholder="" aria-describedby="basic-addon1">
+>>>>>>> branch 'master' of https://github.com/netsoftwang/dream.git
 					<div class="input-group-addon">cm</div>
 				</div>
 			</div>
