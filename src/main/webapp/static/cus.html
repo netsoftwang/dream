@@ -2,29 +2,21 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	<title>字典表</title>
-	<link rel="stylesheet" type="text/css" href="../EasyUI/themes/default/easyui.css">
-	<link rel="stylesheet" type="text/css" href="../EasyUI/themes/icon.css">
-	<script type="text/javascript" src="../EasyUI/jquery.min.js"></script>
-	<script type="text/javascript" src="../EasyUI/jquery.easyui.min.js"></script>
-	<script type="text/javascript" src="../js/myjs/easyuiEdit.js"></script>
+	<title>用户表</title>
+	<link rel="stylesheet" type="text/css" href="EasyUI/themes/default/easyui.css">
+	<link rel="stylesheet" type="text/css" href="EasyUI/themes/icon.css">
+	<script type="text/javascript" src="EasyUI/jquery.min.js"></script>
+	<script type="text/javascript" src="EasyUI/jquery.easyui.min.js"></script>
 </head>
 <body>
 	<div id="tb" style="height:auto">
-		<a href="javascript:void(0)" class="easyui-linkbutton" data-options="plain:true">组名称:</a>
-		<input id="ccc" class="easyui-textbox" data-options="width:'120px'">
 		<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true" onclick="query()">查询</a>
-		<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="append()">添加</a>
 		<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="removeit()">删除</a>
 		<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-save',plain:true" onclick="accept()">保存</a>
 		<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-undo',plain:true" onclick="reject()">取消</a>
-		<input id="cccc" class="easyui-textbox" data-options="width:'120px',readonly:true,disabled:true">
-		<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-redo',plain:true" onclick="updateCache()">更新缓存</a>
 	</div>
-	<table id="mainTableId"  title="服务列表" style="height:auto">
+	<table id="mainTableId"  title="用户列表" style="height:auto">
 	</table>
-
-	
 	
 <script type="text/javascript">
 	$('#ccc').textbox()
@@ -37,39 +29,56 @@
 			"fitColumns":true,
 			"pagination":true,
 			"toolbar":'#tb',
-			queryParams:{
-				"strGroupName_like":$("#ccc").textbox("getValue")
-			},
 			pageSize:40,
 			"onDblClickCell":onDBClick,
-			"url":'../../apolloData/dict/get.cdo',
+			"url":'../cus/getCus',
 		    columns:[[
 		    	{field:'lId',width:100,title:'lId'},
-				{field:'strMode',width:100,title:'资方id',editor:getFundCombo()},
-				{field:'strGroupName',width:100,title:'组名称',editor:'text'},
-				{field:'strName',width:100,title:'名称',editor:'text'},
-				{field:'strFieldName',width:100,title:'字段名称',editor:'text'},
-				{field:'strValue',width:100,title:'字段值',editor:'text'},
-				{field:'srConstraint',width:100,title:'约束',editor:'text'},
-				{field:'strMsg',width:100,title:'描述',editor:'text'},
-				{field:'strState',width:100,title:'状态',editor:getDictCombo("CONST_FLAG_TYPE",null)},
-				{field:'dtCreateTime',width:100,title:'创建时间'}
+				{field:'strUserName',width:100,title:'用户名',editor:'text'},
+				{field:'strPhone',width:100,title:'电话号码',editor:'text'},
+				{field:'lHeight',width:100,title:'身高',editor:'text'},
+				{field:'lWeight',width:100,title:'体重',editor:'text'},
+				{field:'lBMI',width:100,title:'lBMI',editor:'text'},
+				{field:'lWantWeight',width:100,title:'理想体重',editor:'text'},
+				{field:'lXiongWei',width:100,title:'胸围',editor:'text'},
+				{field:'lYaoWei',width:100,title:'腰围',editor:'text'},
+				{field:'lTunWei',width:100,title:'臀围',editor:'text'},
+				{field:'lShouBi',width:100,title:'手臂',editor:'text'},
+				{field:'lDaTui',width:100,title:'大腿',editor:'text'},
+				{field:'lXiaoTui',width:100,title:'小腿',editor:'text'},
+				{field:'strJianFei',width:100,title:'减肥',editor:'text'},
+				{field:'strProductName',width:100,title:'减肥产品',editor:'text'},
+				{field:'strStartTime',width:100,title:'减肥开始时间',editor:'text'},
+				{field:'strEndTime',width:100,title:'减肥结束时间',editor:'text'},
+				{field:'strShuiGuo',width:100,title:'是否水果减肥',editor:'text'},
+				{field:'strAoYe',width:100,title:'是否熬夜',editor:'text'},
+				{field:'strShiJiu',width:100,title:'是否嗜酒',editor:'text'},
+				{field:'strBianMi',width:100,title:'是否便秘',editor:'text'},
+				{field:'strBianMiTianShu',width:100,title:'便秘天数',editor:'text'},
+				{field:'strGaoXueYa',width:100,title:'是否高血压',editor:'text'},
+				{field:'strZuiGaoXueYa',width:100,title:'最高高血压',editor:'text'},
+				{field:'strZuiDiXueYa',width:100,title:'最低高血压',editor:'text'},
+				{field:'strTangNiaoBing',width:100,title:'是否糖尿病',editor:'text'},
+				{field:'strXueTangZhi',width:100,title:'血糖值',editor:'text'},
+				{field:'strPinXue',width:100,title:'是否贫血',editor:'text'},
+				{field:'strXueHongDanBai',width:100,title:'血红蛋白',editor:'text'},
+				{field:'strChangWeiYan',width:100,title:'是否肠胃炎',editor:'text'},
+				{field:'strZhiFangGan',width:100,title:'是否脂肪肝',editor:'text'},
+				{field:'strZhiFangGanNeiRong',width:100,title:'脂肪肝内容',editor:'text'},
+				{field:'strYunDong',width:100,title:'是否运动减肥',editor:'text'},
+				{field:'strShuiZhong',width:100,title:'是否水肿',editor:'text'},
+				{field:'strTongJing',width:100,title:'是否痛经',editor:'text'},
+				{field:'strShangCiYueJing',width:100,title:'上次痛经时间',editor:'text'},
+				{field:'strYueJingZhouQi',width:100,title:'月经周期',editor:'text'},
+				{field:'strWuChan',width:100,title:'午餐',editor:'text'},
+				{field:'strYinShui',width:100,title:'饮水量',editor:'text'},
+				{field:'dtCreateTime',width:100,title:'创建时间',editor:'text'}
 		    ]]
 		});
 	}
 	
-	function updateCache(){
-		$.post("../../apolloData/dict/updateCache.cdo?strFieldName=CacheTime",{},function(data){
-			$.post("../../apolloData/dict/get.cdo?strFieldName=CacheTime",{},function(data){
-				$("#cccc").textbox("setValue",data.rows[0].strValue);
-			})
-		});
-	}
+	 
 	$(function(){
-		//加载缓存值
-		$.post("../../apolloData/dict/get.cdo?strFieldName=CacheTime",{},function(data){
-			$("#cccc").textbox("setValue",data.rows[0].strValue);
-		});
 		query();
 	})
 	

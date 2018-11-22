@@ -1,5 +1,6 @@
 package com.palace.hg;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -168,7 +169,12 @@ public class UserService  extends Controller {
 		map.put("total", Db.queryInt(sql,list.toArray(new Object[list.size()])));
 		sb.append(strLimit);
 		sql = "select * from  "+strDBName+"."+strTableName+" "+sb.toString();
-		map.put("rows",Db.query(sql,list.toArray(new Object[list.size()])));
+		List<Record> rList = Db.find(sql,list.toArray(new Object[list.size()]));
+		List<Map<String,Object>> rr = new ArrayList<>();
+		for(Record r : rList) {
+			rr.add(r.getColumns());
+		}
+		map.put("rows",rr);
     	return map;
     }
     
