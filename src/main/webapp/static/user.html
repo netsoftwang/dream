@@ -2,14 +2,9 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-
 <link type="text/css" href="css/bootstrap.min.css" rel="stylesheet">
 <link type="text/css" href="css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
 <style type="text/css">
-	body {
-		background: #c1e1e1;
-	}
 	.top { margin-bottom: 10px; }
 	.middle {
 	    float: none;
@@ -39,13 +34,13 @@ $(function(){
 			strUserName: "required",
 			strPhone: "required",
 			lHeight: {
-				range:[0,200]
+				range:[0,100]
 			},
 			lWeight: {
-				range:[0,200]
+				range:[0,100]
 			},
 			lWantWeight: {
-				range:[0,200]
+				range:[0,100]
 			},
 			lXiongWei: {
 				range:[0,100]
@@ -69,9 +64,9 @@ $(function(){
 		messages: {
 			strUserName: "用户名不能为空",
 			strPhone: "手机不能为空",
-			lHeight: "身高取值0到200",
-			lWeight: "体重取值0到200",
-			lWantWeight:"理想体重取值0到200",
+			lHeight: "身高取值0到100",
+			lWeight: "体重取值0到100",
+			lWantWeight:"理想体重取值0到100",
 			lXiongWei: "胸围取值0到100",
 			lYaoWei: "腰围取值0到100",
 			lTunWei: "臀围取值0到100",
@@ -97,7 +92,7 @@ $(function(){
 				if(rs.code != 0 ){
 					msg(rs.msg); 
 				}else{
-					window.location.href="end.html";
+					msg("二萌期待与您共同见证，42天后您开挂般的人生。");
 				}
 			});
 		}
@@ -136,11 +131,21 @@ $(function(){
 				if($("input[name="+key+"]").attr("type") == "text"){
 					$("input[name="+key+"]").val(val);
 				}else{
+<<<<<<< HEAD
 					if(val != ""){
 						if(jObj.attr("flag") == "select"){
 							$("#"+key+"Id").find("option[value="+val+"]").attr("selected",true);
 	
 						}
+=======
+					if(ele.attr("type") == "radio"){
+						//ele.attr("checked",false);
+					}else{
+						if(key == "strYinShui" || key=="strWuChan"){
+							$("input[name="+key+"] option[text='"+val+"']").attr("selected", true);
+						}
+						ele.val(val);
+>>>>>>> branch 'master' of git@github.com:netsoftwang/dream.git
 					}
 				}
 			}
@@ -175,30 +180,24 @@ function validate(){
 
 function jianFeiExt(val){
 	var html=		
-		'<div id="jianFeiExtId">'+
-		'<div class="row top">'+
-		'	<div class="col-xs-10 col-lg-8">'+
-		'		<div class="input-group input-group-sm">'+
-		'			<span class="input-group-addon" >产品名称</span>'+
-		'			<input type="text" name="strProductName" class="form-control" placeholder="" aria-describedby="basic-addon1" >'+
-		'		</div>'+
+		'<div class="row top" id="jianFeiExtId">'+
+		'	<div class="col-lg-2">'+
+		'	<div class="input-group input-group-sm">'+
+		'		<span class="input-group-addon" >名称</span>'+
+		'		<input type="text" name="strProductName" class="form-control" placeholder="" aria-describedby="basic-addon1" >'+
 		'	</div>'+
 		'</div>'+
-		'<div class="row top">'+
-		'	<div class="col-xs-10 col-lg-8">'+
-		'		<div class="input-group input-group-sm">'+
-		'			<span class="input-group-addon" >开始时间</span>'+
-		'			<input type="text" name="strStartTime" id="startTimeId" class="form-control" placeholder="" aria-describedby="basic-addon1" >'+
-		'		</div>'+
+		'<div class="col-lg-2">'+
+		'	<div class="input-group input-group-sm">'+
+		'		<span class="input-group-addon" >开始时间</span>'+
+		'		<input type="text" name="strStartTime" id="startTimeId" class="form-control" placeholder="" aria-describedby="basic-addon1" >'+
 		'	</div>'+
 		'</div>'+
-		'<div class="row top">'+
-		'	<div class="col-xs-10 col-lg-8">'+
-		'		<div class="input-group input-group-sm">'+
-		'			<span class="input-group-addon" >结束时间</span>'+
-		'			<input type="text" name="strEndTime" id="endTimeId" class="form-control" placeholder="" aria-describedby="basic-addon1" >'+
-		'		</div>'+
-		'	</div>'
+		'<div class="col-lg-2">'+
+		'	<div class="input-group input-group-sm">'+
+				'<span class="input-group-addon" >结束时间</span>'+
+				'<input type="text" name="strEndTime" id="endTimeId" class="form-control" placeholder="" aria-describedby="basic-addon1" >'+
+			'</div>'+
 		'</div>'+
 		'</div>';
 	if(val){
@@ -242,7 +241,7 @@ function msg(msg){
 function zhiFangGan(val){
 	var html=
 	'	<div class="row top" id="zhiFangGanExtId">'+
-	'	<div class="col-xs-10">'+
+	'	<div class="col-lg-6">'+
 	'		<div class="input-group input-group-sm">'+
 	'			<span class="input-group-addon" id="">具体内容</span>'+
 	'			<input type="text" name="strZhiFangGanNeiRong" class="form-control" placeholder="" aria-describedby="basic-addon1" >'+
@@ -270,7 +269,7 @@ function zhiFangGan(val){
 function pingXue(val){
 	var html=
 	'		<div class="row top" id="pingXueExtId">'+
-	'	<div class="col-xs-10">'+
+	'	<div class="col-lg-8">'+
 	'		<div class="input-group input-group-sm">'+
 	'			<span class="input-group-addon" id="">当前血红蛋白值</span>'+
 	'			<input type="text" name="strXueHongDanBai" class="form-control" placeholder="" aria-describedby="basic-addon1" >'+
@@ -299,7 +298,7 @@ function pingXue(val){
 function tangNiaoBing(val){
 	var html = 
 	'	<div class="row top" id="tangNiaoBingExtId">'+
-	'	<div class="col-xs-10 ">'+
+	'	<div class="col-lg-6">'+
 	'		<div class="input-group input-group-sm">'+
 	'			<span class="input-group-addon" id="">血糖值</span>'+
 	'			<input type="text" name="strXueTangZhi" class="form-control" placeholder="" aria-describedby="basic-addon1" >'+
@@ -328,7 +327,7 @@ function tangNiaoBing(val){
 function bianMi(val){
 	var html=
 		'	<div class="row top" id="bianMiExtId">'+
-		'	<div class="col-xs-10 col-lg-8">'+
+		'	<div class="col-lg-4">'+
 		'		<div class="input-group input-group-sm">'+
 		'			<span class="input-group-addon" id="">多少天一次</span>'+
 		'			<input type="text" name="strBianMiTianShu" class="form-control" placeholder="" aria-describedby="basic-addon1" >'+
@@ -358,13 +357,13 @@ function bianMi(val){
 function xueYa(val){
 	var html=
 	'	<div class="row top" id="gaoXueYaExtId">'+
-	'	<div class="col-xs-5 col-lg-4">'+
+	'	<div class="col-lg-3">'+
 	'		<div class="input-group input-group-sm">'+
 	'			<span class="input-group-addon" id="">最高血压</span>'+
 	'			<input type="text" name="strZuiGaoXueYa" class="form-control" placeholder="" aria-describedby="basic-addon1" >'+
 	'		</div>'+
 	'	</div>'+
-	'	<div class="col-xs-5 col-lg-4">'+
+	'	<div class="col-lg-3">'+
 	'		<div class="input-group input-group-sm">'+
 	'			<span class="input-group-addon" id="">最低血压</span>'+
 	'			<input type="text" name="strZuiDiXueYa" class="form-control" placeholder="" aria-describedby="basic-addon1" >'+
@@ -406,14 +405,14 @@ function xueYa(val){
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
-<div class="container">
+<div class="container middle">
 <div class="page-header">
   <h1>welcome come </h1>
 </div>
 <div>
 	<form action="" style="margin-top:20px" id="formId">
 		<div class="row top">
-			<div class="col-xs-10 col-lg-8">
+			<div class="col-lg-8">
 				<div class="input-group input-group-sm">
 					<span class="input-group-addon" id="">姓名</span>
 					<input type="text" name="strUserName" class="form-control" placeholder="" aria-describedby="basic-addon1" >
@@ -421,54 +420,81 @@ function xueYa(val){
 			</div>
 		</div>
 		<div class="row top">
-			<div class="col-xs-10 col-lg-8">
+			<div class="col-lg-8">
 				<div class="input-group input-group-sm">
 					<span class="input-group-addon" id="">电话</span>
 					<input type="text"  id="strPhoneId" name="strPhone" class="form-control" placeholder="" aria-describedby="basic-addon1">
 				</div>
 			</div>
 		</div>
+	 	<div class="row top">
+			<div class="col-lg-2">
+				<div class="input-group input-group-sm">
+					<span class="input-group-addon" id="">身高</span>
+					<input type="text"  name="lHeight" class="form-control" placeholder="" aria-describedby="basic-addon1">
+					 <div class="input-group-addon">cm</div>
+				</div>
+			</div>
+			<div class="col-lg-2">
+				<div class="input-group input-group-sm">
+					<span class="input-group-addon" id="">体重</span>
+					<input type="text"  name="lWeight" class="form-control" placeholder="" aria-describedby="basic-addon1">
+					<div class="input-group-addon">kg</div>
+				</div>
+			</div>
+			<div class="col-lg-2">
+				<div class="input-group input-group-sm">
+					<span class="input-group-addon" id="">bmi</span>
+					<input type="text"  name="lBMI" class="form-control" placeholder="" aria-describedby="basic-addon1">
+				</div>
+			</div>
+			<div class="col-lg-2">
+				<div class="input-group input-group-sm">
+					<span class="input-group-addon" id="">理想体重</span>
+					<input type="text"  name="lWantWeight" class="form-control" placeholder="" aria-describedby="basic-addon1">
+					<div class="input-group-addon">kg</div>
+				</div>
+			</div>
+		</div>
 		<div class="row top">
-			<div class="col-xs-5 col-lg-4">
+			<div class="col-lg-2">
 				<div class="input-group input-group-sm">
 					<span class="input-group-addon" id="">胸围</span>
 					<input type="text" name="lXiongWei" class="form-control" placeholder="" aria-describedby="basic-addon1">
 					<div class="input-group-addon">cm</div>
 				</div>
 			</div>
-			<div class="col-xs-5 col-lg-4">
+			<div class="col-lg-2">
 				<div class="input-group input-group-sm">
 					<span class="input-group-addon" id="">腰围</span>
 					<input type="text"  name="lYaoWei" class="form-control" placeholder="" aria-describedby="basic-addon1">
 					<div class="input-group-addon">cm</div>
 				</div>
 			</div>
-		</div>
-		<div class="row top">
-			<div class="col-xs-5 col-lg-4">
+			<div class="col-lg-2">
 				<div class="input-group input-group-sm">
 					<span class="input-group-addon" id="">臀围</span>
 					<input type="text" name="lTunWei" class="form-control" placeholder="" aria-describedby="basic-addon1">
 					<div class="input-group-addon">cm</div>
 				</div>
 			</div>
-			<div class="col-xs-5 col-lg-4">
+		</div>	
+		<div class="row top">
+			<div class="col-lg-2">
 				<div class="input-group input-group-sm">
 					<span class="input-group-addon" id="">手臂</span>
 					<input type="text" name="lShouBi" class="form-control" placeholder="" aria-describedby="basic-addon1">
 					<div class="input-group-addon">cm</div>
 				</div>
 			</div>
-		</div>	
-		<div class="row top">
-			<div class="col-xs-5 col-lg-4">
+			<div class="col-lg-2">
 				<div class="input-group input-group-sm">
 					<span class="input-group-addon" id="">大腿</span>
 					<input type="text"  name="lDaTui" class="form-control" placeholder="" aria-describedby="basic-addon1">
 					<div class="input-group-addon">cm</div>
 				</div>
 			</div>
-			<div class="col-xs-5 col-lg-4">
+			<div class="col-lg-2">
 				<div class="input-group input-group-sm">
 					<span class="input-group-addon" id="">小腿</span>
 					<input type="text"  name="lXiaoTui" class="form-control" placeholder="" aria-describedby="basic-addon1">
@@ -477,40 +503,10 @@ function xueYa(val){
 			</div>
 		</div>	
 		<div class="row top">
-			<div class="col-xs-5 col-lg-4">
-				<div class="input-group input-group-sm">
-					<span class="input-group-addon" id="">身高</span>
-					<input type="text"  name="lHeight" class="form-control" placeholder="" aria-describedby="basic-addon1">
-					 <div class="input-group-addon">cm</div>
-				</div>
-			</div>
-			<div class="col-xs-5 col-lg-4">
-				<div class="input-group input-group-sm">
-					<span class="input-group-addon" id="">体重</span>
-					<input type="text"  name="lWeight" class="form-control" placeholder="" aria-describedby="basic-addon1">
-					<div class="input-group-addon">kg</div>
-				</div>
-			</div>
-		</div>
-		<div class="row top">
-			<div class="col-xs-5 col-lg-4">
-				<div class="input-group input-group-sm">
-					<span class="input-group-addon" id="">理想体重</span>
-					<input type="text"  name="lWantWeight" class="form-control" placeholder="" aria-describedby="basic-addon1">
-				</div>
-			</div>
-			<div class="col-xs-5 col-lg-4">
-				<div class="input-group input-group-sm">
-					<span class="input-group-addon" id="">bmi</span>
-					<input type="text"  name="lBMI" class="form-control" placeholder="" aria-describedby="basic-addon1">
-				</div>
-			</div>
-		</div>
-		<div class="row top">
-			<div class="col-xs-5 col-lg-4">
+			<div class="col-lg-4">
 				<label for="" >每天喝水量大致是多少</label>
 			</div>
-			<div class="col-xs-5 col-lg-4">
+			<div class="col-lg-2">
 				<select flag ="select"  class="form-control" name="strYinShui" id="strYinShuiId">
 				  <option value="1000ml以下">1000ml以下</option>
 				  <option value="1000-1500ml">1000-1500ml</option>
@@ -520,10 +516,10 @@ function xueYa(val){
 			</div>
 		</div>	
 		<div class="row top">
-			<div class="col-xs-5 col-lg-4">
+			<div class="col-lg-4">
 				<label for="" >每日午餐如何解决</label>
 			</div>
-			<div class="col-xs-5 col-lg-4">
+			<div class="col-lg-2">
 				<select flag ="select"  class="form-control" name="strWuChan" id="strWuChanId">
 				  <option value="外卖">外卖</option>
 				  <option value="做饭">做饭</option>
@@ -531,10 +527,10 @@ function xueYa(val){
 			</div>
 		</div>	
 		<div class="row top" id="jianFeiRowId">
-			<div class="col-xs-5 col-lg-4">
+			<div class="col-lg-4">
 				<label for="" >是否服用过减肥药或其他减肥方法</label>
 			</div>
-			<div class="col-xs-5 col-lg-4">
+			<div class="col-lg-2">
 				<select flag ="select"  class="form-control" name="strJianFei" id="strJianFeiId">
 					<option value="false">否</option>
 					<option value="true">是</option>
@@ -542,10 +538,10 @@ function xueYa(val){
 			</div>
 		</div>
 		<div class="row top">
-			<div class="col-xs-5 col-lg-4">
+			<div class="col-lg-4">
 				<label for="" >是否有尝试过晚上不吃饭或者只吃水果的方法</label>
 			</div>
-			<div class="col-xs-5 col-lg-4">
+			<div class="col-lg-2">
 				<select flag ="select"  class="form-control" name="strShuiGuo" id="strShuiGuoId">
 					<option value="false">否</option>
 					<option value="true">是</option>
@@ -553,10 +549,10 @@ function xueYa(val){
 			</div>
 		</div>
 		<div class="row top">
-			<div class="col-xs-5 col-lg-4">
+			<div class="col-lg-4">
 				<label for="" >是否熬夜（超过11点均为熬夜）</label>
 			</div>
-			<div class="col-xs-5 col-lg-4">
+			<div class="col-lg-2">
 				<select flag ="select"  class="form-control" name="strAoYe" id="strAoYeId">
 					<option value="false">否</option>
 					<option value="true">是</option>
@@ -564,10 +560,10 @@ function xueYa(val){
 			</div>
 		</div>
 		<div class="row top">
-			<div class="col-xs-5 col-lg-4">
+			<div class="col-lg-4">
 				<label for="" >是否嗜酒</label>
 			</div>
-			<div class="col-xs-5 col-lg-4">
+			<div class="col-lg-2">
 				<select flag ="select"  class="form-control" name="strShiJiu" id="strShiJiuId">
 					<option value="false">否</option>
 					<option value="true">是</option>
@@ -575,10 +571,10 @@ function xueYa(val){
 			</div>
 		</div>
 		<div class="row top" id="bianMiRowId">
-			<div class="col-xs-5 col-lg-4">
+			<div class="col-lg-4">
 				<label for="" >是否便秘（一天保证一次）</label>
 			</div>
-			<div class="col-xs-5 col-lg-4">
+			<div class="col-lg-2">
 				<select flag ="select"  class="form-control" name="strBianMi" id="strBianMiId">
 					<option value="false">否</option>
 					<option value="true">是</option>
@@ -587,10 +583,10 @@ function xueYa(val){
 		</div>	
 
 		<div class="row top" id="xueYaRowId">
-			<div class="col-xs-5 col-lg-4">
+			<div class="col-lg-4">
 				<label for="" >是否有低血压或者高血压</label>
 			</div>
-			<div class="col-xs-5 col-lg-4">
+			<div class="col-lg-2">
 				<select flag ="select"  class="form-control" name="strGaoXueYa" id="strGaoXueYaId">
 					<option value="false">否</option>
 					<option value="true">是</option>
@@ -598,10 +594,10 @@ function xueYa(val){
 			</div>
 		</div>
 		<div class="row top" id="tangNiaoBingRowId">
-			<div class="col-xs-5 col-lg-4">
+			<div class="col-lg-4">
 				<label for="" >是否有低血糖或者糖尿病</label>
 			</div>
-			<div class="col-xs-5 col-lg-4">
+			<div class="col-lg-2">
 				<select flag ="select"  class="form-control" name="strTangNiaoBing" id="strTangNiaoBingId">
 					<option value="false">否</option>
 					<option value="true">是</option>
@@ -609,10 +605,10 @@ function xueYa(val){
 			</div>
 		</div>	
 		<div class="row top" id="pingXueRowId">
-			<div class="col-xs-5 col-lg-4">
+			<div class="col-lg-4">
 				<label for="" >是否患有贫血</label>
 			</div>
-			<div class="col-xs-5 col-lg-4">
+			<div class="col-lg-2">
 				<select flag ="select"  class="form-control" name="strPinXue" id="strPinXueId">
 					<option value="false">否</option>
 					<option value="true">是</option>
@@ -620,10 +616,10 @@ function xueYa(val){
 			</div>
 		</div>
 		<div class="row top">
-			<div class="col-xs-5 col-lg-4">
+			<div class="col-lg-4">
 				<label for="" >是否有肠炎胃炎等疾病</label>
 			</div>
-			<div class="col-xs-5 col-lg-4">
+			<div class="col-lg-2">
 				<select flag ="select"  class="form-control" name="strChangWeiYan" id="strChangWeiYanId">
 					<option value="false">否</option>
 					<option value="true">是</option>
@@ -631,10 +627,10 @@ function xueYa(val){
 			</div>
 		</div>
 		<div class="row top" id="zhiFangGanRowId">
-			<div class="col-xs-5 col-lg-4">
+			<div class="col-lg-4">
 				<label for="" >是否患有甲状腺、多囊、脂肪肝及其他疾病史</label>
 			</div>
-			<div class="col-xs-5 col-lg-4">
+			<div class="col-lg-2">
 				<select flag ="select"  class="form-control" name="strZhiFangGan" id="strZhiFangGanId">
 					<option value="false">否</option>
 					<option value="true">是</option>
@@ -642,10 +638,10 @@ function xueYa(val){
 			</div>
 		</div>
 		<div class="row top">
-			<div class="col-xs-5 col-lg-4">
+			<div class="col-lg-4">
 				<label for="" >疗程期间是否会加入运动</label>
 			</div>
-			<div class="col-xs-5 col-lg-4">
+			<div class="col-lg-2">
 				<select flag ="select"  class="form-control" name="strYunDong" id="strYunDongId">
 					<option value="false">否</option>
 					<option value="true">是</option>
@@ -653,10 +649,10 @@ function xueYa(val){
 			</div>
 		</div>	
 		<div class="row top">
-			<div class="col-xs-5 col-lg-4">
+			<div class="col-lg-4">
 				<label for="" >是否属于易水肿体质</label>
 			</div>
-			<div class="col-xs-5 col-lg-4">
+			<div class="col-lg-2">
 				<select flag ="select"  class="form-control" name="strShuiZhong" id="strShuiZhongId">
 					<option value="false">否</option>
 					<option value="true">是</option>
@@ -665,10 +661,10 @@ function xueYa(val){
 		</div>	
 	
 		<div class="row top">
-			<div class="col-xs-5 col-lg-4">
+			<div class="col-lg-4">
 				<label for="" >是否痛经</label>
 			</div>
-			<div class="col-xs-5 col-lg-4">
+			<div class="col-lg-2">
 				<select flag ="select"  class="form-control" name="strTongJing" id="strTongJingId">
 					<option value="false">否</option>
 					<option value="true">是</option>
@@ -676,30 +672,25 @@ function xueYa(val){
 			</div>
 		</div>
 		<div class="row top" id="">
-			<div class="col-xs-10 col-lg-8">
-				<div class="input-group input-group-sm">
-					<span class="input-group-addon" id="">月经周期天数</span>
-					<input type="text" name="strYueJingZhouQi" class="form-control" placeholder="" aria-describedby="basic-addon1" >
-				</div>
-			</div>
-		</div>
-		<div class="row top" id="">
-			<div class="col-xs-10 col-lg-8">
+			<div class="col-lg-3">
 				<div class="input-group input-group-sm">
 					<span class="input-group-addon" id="">上次月经时间</span>
 					<input type="text" name="strShangCiYueJing" id="yueJingId" class="form-control" placeholder="" aria-describedby="basic-addon1" >
 				</div>
 			</div>
+			<div class="col-lg-3">
+				<div class="input-group input-group-sm">
+					<span class="input-group-addon" id="">月经周期是多少天</span>
+					<input type="text" name="strYueJingZhouQi" class="form-control" placeholder="" aria-describedby="basic-addon1" >
+				</div>
+			</div>
 		</div>
 		<div class="row top">
-			<div class="row top" id="">
-				<h5>注明：点击确认，即代表同意为其安排专业的金牌售后进行二对一服务。</h5>
-				<h5>请在疗程开始后，积极配合售后工作，否则不予保证瘦身效果。</h5>
-				<h5>请确认以上信息准确无误，便于森米金牌售后为您量身制定科学的瘦身方案。</h5>
-			</div>
-		<div class="row top" id="">
-			<input class="btn btn-default" id="submitId" type="submit" value="确认">
-		</div>
+			<h5>注明：点击确认，即代表同意为其安排专业的金牌售后进行二对一服务。</h5>
+			<h5>请在疗程开始后，积极配合售后工作，否则不予保证瘦身效果。</h5>
+			<h5>请确认以上信息准确无误，便于森米金牌售后为您量身制定科学的瘦身方案。</h5>
+		</div>	
+		<input class="btn btn-default" id="submitId" type="submit" value="确认">
 	</form>
 </div>
 </div>
