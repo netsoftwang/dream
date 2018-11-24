@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link type="text/css" href="../css/bootstrap.min.css" rel="stylesheet">
+<link type="text/css" href="../css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+<style type="text/css">
+	body {
+		background-image:url(ke01_img/leon.png); background-repeat:repeat; font-size:12px; font-family:'Microsoft YaHei',sans-serif; line-height:20px; font-smooth:always;
+	}
+	.top { margin-bottom: 10px; }
+	.middle {
+	    float: none;
+	    display: block;
+	    margin-left: auto;
+	    margin-right: auto;
+	}
+</style>
+<script type="text/javascript" src="../js/jquery.min.js"></script>
+<script type="text/javascript" src="../js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../js/bootstrap-datetimepicker.min.js"></script>
+<script type="text/javascript" src="../js/jquery.validate.js"></script>
+<script type="text/javascript">
+
+
+$(function(){
+	jianFeiExt(false);
+	xueYa(false);
+	bianMi(false);
+	tangNiaoBing(false);
+	pingXue(false);
+	zhiFangGan(false);
+	initDate("yueJingId");
+	
+	$( "#formId" ).validate( {
+		rules: {
+			strUserName: "required",
+			strPhone: "required",
+			lHeight: {
+				range:[0,200]
+			},
+			lWeight: {
+				range:[0,200]
+			},
+			lWantWeight: {
+				range:[0,200]
+			},
+			lXiongWei: {
+				range:[0,100]
+			},
+			lYaoWei: {
+				range:[0,100]
+			},
+			lTunWei: {
+				range:[0,100]
+			},
+			lShouBi: {
+				range:[0,100]
+			},
+			lDaTui: {
+				range:[0,100]
+			},
+			lXiaoTui: {
+				range:[0,100]
+			}
+		},
+		messages: {
+			strUserName: "用户名不能为空",
+			strPhone: "手机不能为空",
+			lHeight: "身高取值0到200",
+			lWeight: "体重取值0到200",
+			lWantWeight:"理想体重取值0到200",
+			lXiongWei: "胸围取值0到100",
+			lYaoWei: "腰围取值0到100",
+			lTunWei: "臀围取值0到100",
+			lShouBi: "臂长取值0到100",
+			lDaTui: "大腿取值0到100",
+			lXiaoTui: "小腿取值0到100"
+		},
+		errorElement: "em",
+		errorPlacement: function ( error, element ) {
+			msg(error[0].innerHTML);
+		},
+		highlight: function ( element, errorClass, validClass ) {
+			$( element ).parents( ".col-sm-5" ).addClass( "has-error" ).removeClass( "has-success" );
+		},
+		unhighlight: function (element, errorClass, validClass) {
+			$( element ).parents( ".col-sm-5" ).addClass( "has-success" ).removeClass( "has-error" );
+		},
+		submitHandler:function(form){
+	    	var data = $("#formId").serialize();
+			console.log(data);
+			$.post("../../cus/saveCus",data,function(rs){
+				console.log(rs);
+				if(rs.code != 0 ){
+					msg(rs.msg); 
+				}else{
+					window.location.href="end.html";
+				}
+			});
+		}
+	} );
+	$("#strPhoneId").keyup(function(){
+		var strPhone = $(this).val();
+		$.post("../../cus/getByPhone",{"strPhone":strPhone},function(rs){
+			if(rs.code != 0){
+				return;
+			}
+			var obj = rs.data;
+			if(obj['strZhiFangGan'] == "true"){
+				zhiFangGan(true);
+			}
+			if(obj['strPingXue'] == "true"){
+				pingXue(true);	
+			}
+			if(obj['strTangNiaoBing'] == "true"){
+				tangNiaoBing(true);
+			}
+			if(obj['strBianMi'] == "true"){
+				bianMi(true);
+			}
+			if(obj['strGaoXueYa'] == "true"){
+				xueYa(true);
+			}
+			if(obj['strJianFei'] == "true"){
+				jianFeiExt(true);
+			}
+			for(var key in obj){
+				if("strJianFei" == key){
+					console.log(key);
+				}
+				var val =obj[key];
+				var jObj = $("#"+key+"Id");
+				if($("input[name="+key+"]").attr("type") == "text"){
+					$("input[name="+key+"]").val(val);
+				}else{
+					if(val != ""){
+						if(jObj.attr("flag") == "select"){
+							$("#"+key+"Id").find("option[value="+val+"]").attr("selected",true);
+	
+						}
+					}
+				}
+			}
+		});
+	});
+	
+	$("input[name=lWeight").keyup(function(){
+		var lh =$("input[name=lHeight").val();
+		var lw = $(this).val();
+		if(lw > 0 && lh > 0){
+			var v = lw/lh/lh+"";
+			 v = v.substring(0,v.indexOf(".") + 3);
+			$("input[name=lBMI").val(v);
+		}
+	});
+	
+	$("input[name=lHeight]").keyup(function(){
+		var lw =$("input[name=lWeight").val();
+		var lh = $(this).val();
+		if(lw > 0 && lh > 0){
+			var v = lw/lh/lh+"";
+			 v = v.substring(0,v.indexOf(".") + 3);
+			$("input[name=lBMI").val(v);
+		}
+	});
+});
+function validate(){
+	$( "#formId" ).validate( {
+
+	} );
+}
+
+function jianFeiExt(val){
+	var html=		
+		'<div id="jianFeiExtId">'+
+		'<div class="row top">'+
+		'	<div class="col-xs-10 col-lg-8">'+
+		'		<div class="input-group input-group-sm">'+
+		'			<span class="input-group-addon" >产品名称</span>'+
+		'			<input type="text" name="strProductName" class="form-control" placeholder="" aria-describedby="basic-addon1" >'+
+		'		</div>'+
+		'	</div>'+
+		'</div>'+
+		'<div class="row top">'+
+		'	<div class="col-xs-10 col-lg-8">'+
+		'		<div class="input-group input-group-sm">'+
+		'			<span class="input-group-addon" >开始时间</span>'+
+		'			<input type="text" name="strStartTime" id="startTimeId" class="form-control" placeholder="" aria-describedby="basic-addon1" >'+
+		'		</div>'+
+		'	</div>'+
+		'</div>'+
+		'<div class="row top">'+
+		'	<div class="col-xs-10 col-lg-8">'+
+		'		<div class="input-group input-group-sm">'+
+		'			<span class="input-group-addon" >结束时间</span>'+
+		'			<input type="text" name="strEndTime" id="endTimeId" class="form-control" placeholder="" aria-describedby="basic-addon1" >'+
+		'		</div>'+
+		'	</div>'
+		'</div>'+
+		'</div>';
+	if(val){
+		var jianFeiExtDom = $("#jianFeiExtId");
+    	if(jianFeiExtDom.val() === undefined){
+        	$("#jianFeiRowId").after(html);
+        	initDate("endTimeId");
+        	initDate("startTimeId");
+    	}
+	}else{
+		 $('#strJianFeiId').change(function() {
+	        if (this.value == "true") {
+	        	var jianFeiExtDom = $("#jianFeiExtId");
+	        	if(jianFeiExtDom.val() === undefined){
+		        	$("#jianFeiRowId").after(html);
+		        	initDate("endTimeId");
+		        	initDate("startTimeId");
+	        	}
+	        }else if (this.value == "false") {
+	        	$("#jianFeiExtId").remove();
+	        }
+	    });
+	}
+}
+
+function initDate(lId){
+	$("#"+lId).datetimepicker({
+		format: 'yyyy-mm-dd',//显示格式
+		todayHighlight: 1,//今天高亮
+		minView: "month",//设置只显示到月份
+		startView:2,
+		forceParse: 0,
+		showMeridian: 1,
+		autoclose: 1//选择后自动关闭
+		});
+}
+function msg(msg){
+	$("#concentId").text(msg);
+	 $('#dlgId').modal({"show":true});
+}
+function zhiFangGan(val){
+	var html=
+	'	<div class="row top" id="zhiFangGanExtId">'+
+	'	<div class="col-xs-10">'+
+	'		<div class="input-group input-group-sm">'+
+	'			<span class="input-group-addon" id="">具体内容</span>'+
+	'			<input type="text" name="strZhiFangGanNeiRong" class="form-control" placeholder="" aria-describedby="basic-addon1" >'+
+	'		</div>'+
+	'	</div>'+
+	'</div>';
+	if(val){
+		var jianFeiExtDom = $("#zhiFangGanExtId");
+    	if(jianFeiExtDom.val() === undefined){
+        	$("#zhiFangGanRowId").after(html);
+    	}
+	}else{
+		 $('#strZhiFangGanId').change(function() {
+	        if (this.value == "true") {
+	        	var jianFeiExtDom = $("#zhiFangGanExtId");
+	        	if(jianFeiExtDom.val() === undefined){
+		        	$("#zhiFangGanRowId").after(html);
+	        	}
+	        }else if (this.value == "false") {
+	        	$("#zhiFangGanExtId").remove();
+	        }
+	    });
+	}
+}
+function pingXue(val){
+	var html=
+	'		<div class="row top" id="pingXueExtId">'+
+	'	<div class="col-xs-10">'+
+	'		<div class="input-group input-group-sm">'+
+	'			<span class="input-group-addon" id="">当前血红蛋白值</span>'+
+	'			<input type="text" name="strXueHongDanBai" class="form-control" placeholder="" aria-describedby="basic-addon1" >'+
+	'		</div>'+
+	'	</div>'+
+	'</div>';
+	if(val){
+		var jianFeiExtDom = $("#pingXueExtId");
+    	if(jianFeiExtDom.val() === undefined){
+        	$("#pingXueRowId").after(html);
+    	}
+	}else{
+	 $('#strPingXueId').change(function() {
+	        if (this.value == "true") {
+	        	var jianFeiExtDom = $("#pingXueExtId");
+	        	if(jianFeiExtDom.val() === undefined){
+		        	$("#pingXueRowId").after(html);
+	        	}
+	        }else if (this.value == "false") {
+	        	$("#pingXueExtId").remove();
+	        }
+	    });
+	}
+}
+//糖尿病
+function tangNiaoBing(val){
+	var html = 
+	'	<div class="row top" id="tangNiaoBingExtId">'+
+	'	<div class="col-xs-10 ">'+
+	'		<div class="input-group input-group-sm">'+
+	'			<span class="input-group-addon" id="">血糖值</span>'+
+	'			<input type="text" name="strXueTangZhi" class="form-control" placeholder="" aria-describedby="basic-addon1" >'+
+	'		</div>'+
+	'	</div>'+
+	'</div>';
+	if(val){
+		var jianFeiExtDom = $("#tangNiaoBingExtId");
+    	if(jianFeiExtDom.val() === undefined){
+        	$("#tangNiaoBingRowId").after(html);
+    	}
+	}else{
+		 $('#strTangNiaoBingId').change(function() {
+	        if (this.value == "true") {
+	        	var jianFeiExtDom = $("#tangNiaoBingExtId");
+	        	if(jianFeiExtDom.val() === undefined){
+		        	$("#tangNiaoBingRowId").after(html);
+	        	}
+	        }else if (this.value == "false") {
+	        	$("#tangNiaoBingExtId").remove();
+	        }
+	    });
+	}
+}
+//便秘
+function bianMi(val){
+	var html=
+		'	<div class="row top" id="bianMiExtId">'+
+		'	<div class="col-xs-10 col-lg-8">'+
+		'		<div class="input-group input-group-sm">'+
+		'			<span class="input-group-addon" id="">多少天一次</span>'+
+		'			<input type="text" name="strBianMiTianShu" class="form-control" placeholder="" aria-describedby="basic-addon1" >'+
+		'		</div>'+
+		'	</div>'+
+		'</div>';
+	if(val){
+		var jianFeiExtDom = $("#bianMiExtId");
+    	if(jianFeiExtDom.val() === undefined){
+        	$("#bianMiRowId").after(html);
+    	}
+	}else{
+	 $('#strBianMiId').change(function() {
+	        if (this.value == "true") {
+	        	var jianFeiExtDom = $("#bianMiExtId");
+	        	if(jianFeiExtDom.val() === undefined){
+		        	$("#bianMiRowId").after(html);
+	        	}
+	        }else if (this.value == "false") {
+	        	$("#bianMiExtId").remove();
+	        }
+	    });
+	}
+}
+
+//血压
+function xueYa(val){
+	var html=
+	'	<div class="row top" id="gaoXueYaExtId">'+
+	'	<div class="col-xs-5 col-lg-4">'+
+	'		<div class="input-group input-group-sm">'+
+	'			<span class="input-group-addon" id="">最高血压</span>'+
+	'			<input type="text" name="strZuiGaoXueYa" class="form-control" placeholder="" aria-describedby="basic-addon1" >'+
+	'		</div>'+
+	'	</div>'+
+	'	<div class="col-xs-5 col-lg-4">'+
+	'		<div class="input-group input-group-sm">'+
+	'			<span class="input-group-addon" id="">最低血压</span>'+
+	'			<input type="text" name="strZuiDiXueYa" class="form-control" placeholder="" aria-describedby="basic-addon1" >'+
+	'		</div>'+
+	'	</div>'+
+	'</div>';
+	if(val){
+       	var jianFeiExtDom = $("#gaoXueYaExtId");
+       	if(jianFeiExtDom.val() === undefined){
+       		$("#xueYaRowId").after(html);
+       	}
+	}else{
+		 $('#strGaoXueYaId').change(function() {
+	        if (this.value == "true") {
+	        	var jianFeiExtDom = $("#gaoXueYaExtId");
+	        	if(jianFeiExtDom.val() === undefined){
+		        	$("#xueYaRowId").after(html);
+	        	}
+	        }else if (this.value == "false") {
+	        	$("#gaoXueYaExtId").remove();
+	        }
+	    });
+	}
+}
+
+</script>
+</head>
+<body>
+<div id ="dlgId" class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">提示</h4>
+      </div>
+      <div class="modal-body">
+        <p id="concentId"></p>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<div class="container">
+<div class="page-header">
+  <h1>welcome come </h1>
+</div>
+<div>
+	<form action="" style="margin-top:20px" id="formId">
+		<div class="row top">
+			<div class="col-xs-10 col-lg-8">
+				<div class="input-group input-group-sm">
+					<span class="input-group-addon" id="">姓名</span>
+					<input type="text" name="strUserName" class="form-control" placeholder="" aria-describedby="basic-addon1" >
+				</div>
+			</div>
+		</div>
+		<div class="row top">
+			<div class="col-xs-10 col-lg-8">
+				<div class="input-group input-group-sm">
+					<span class="input-group-addon" id="">电话</span>
+					<input type="text"  id="strPhoneId" name="strPhone" class="form-control" placeholder="" aria-describedby="basic-addon1">
+				</div>
+			</div>
+		</div>
+		<div class="row top">
+			<div class="col-xs-5 col-lg-4">
+				<div class="input-group input-group-sm">
+					<span class="input-group-addon" id="">胸围</span>
+					<input type="text" name="lXiongWei" class="form-control" placeholder="" aria-describedby="basic-addon1">
+					<div class="input-group-addon">cm</div>
+				</div>
+			</div>
+			<div class="col-xs-5 col-lg-4">
+				<div class="input-group input-group-sm">
+					<span class="input-group-addon" id="">腰围</span>
+					<input type="text"  name="lYaoWei" class="form-control" placeholder="" aria-describedby="basic-addon1">
+					<div class="input-group-addon">cm</div>
+				</div>
+			</div>
+		</div>
+		<div class="row top">
+			<div class="col-xs-5 col-lg-4">
+				<div class="input-group input-group-sm">
+					<span class="input-group-addon" id="">臀围</span>
+					<input type="text" name="lTunWei" class="form-control" placeholder="" aria-describedby="basic-addon1">
+					<div class="input-group-addon">cm</div>
+				</div>
+			</div>
+			<div class="col-xs-5 col-lg-4">
+				<div class="input-group input-group-sm">
+					<span class="input-group-addon" id="">手臂</span>
+					<input type="text" name="lShouBi" class="form-control" placeholder="" aria-describedby="basic-addon1">
+					<div class="input-group-addon">cm</div>
+				</div>
+			</div>
+		</div>	
+		<div class="row top">
+			<div class="col-xs-5 col-lg-4">
+				<div class="input-group input-group-sm">
+					<span class="input-group-addon" id="">大腿</span>
+					<input type="text"  name="lDaTui" class="form-control" placeholder="" aria-describedby="basic-addon1">
+					<div class="input-group-addon">cm</div>
+				</div>
+			</div>
+			<div class="col-xs-5 col-lg-4">
+				<div class="input-group input-group-sm">
+					<span class="input-group-addon" id="">小腿</span>
+					<input type="text"  name="lXiaoTui" class="form-control" placeholder="" aria-describedby="basic-addon1">
+					<div class="input-group-addon">cm</div>
+				</div>
+			</div>
+		</div>	
+		<div class="row top">
+			<div class="col-xs-5 col-lg-4">
+				<div class="input-group input-group-sm">
+					<span class="input-group-addon" id="">身高</span>
+					<input type="text"  name="lHeight" class="form-control" placeholder="" aria-describedby="basic-addon1">
+					 <div class="input-group-addon">cm</div>
+				</div>
+			</div>
+			<div class="col-xs-5 col-lg-4">
+				<div class="input-group input-group-sm">
+					<span class="input-group-addon" id="">体重</span>
+					<input type="text"  name="lWeight" class="form-control" placeholder="" aria-describedby="basic-addon1">
+					<div class="input-group-addon">kg</div>
+				</div>
+			</div>
+		</div>
+		<div class="row top">
+			<div class="col-xs-5 col-lg-4">
+				<div class="input-group input-group-sm">
+					<span class="input-group-addon" id="">理想体重</span>
+					<input type="text"  name="lWantWeight" class="form-control" placeholder="" aria-describedby="basic-addon1">
+				</div>
+			</div>
+			<div class="col-xs-5 col-lg-4">
+				<div class="input-group input-group-sm">
+					<span class="input-group-addon" id="">bmi</span>
+					<input type="text"  name="lBMI" class="form-control" placeholder="" aria-describedby="basic-addon1">
+				</div>
+			</div>
+		</div>
+		<div class="row top">
+			<div class="col-xs-5 col-lg-4">
+				<label for="" >每天喝水量大致是多少</label>
+			</div>
+			<div class="col-xs-5 col-lg-4">
+				<select flag ="select"  class="form-control" name="strYinShui" id="strYinShuiId">
+				  <option value="1000ml以下">1000ml以下</option>
+				  <option value="1000-1500ml">1000-1500ml</option>
+				  <option value="1500-2000ml">1500-2000ml</option>
+				  <option value="2000ml以上">2000ml以上</option>
+				</select>
+			</div>
+		</div>	
+		<div class="row top">
+			<div class="col-xs-5 col-lg-4">
+				<label for="" >每日午餐如何解决</label>
+			</div>
+			<div class="col-xs-5 col-lg-4">
+				<select flag ="select"  class="form-control" name="strWuChan" id="strWuChanId">
+				  <option value="外卖">外卖</option>
+				  <option value="做饭">做饭</option>
+				</select>
+			</div>
+		</div>	
+		<div class="row top" id="jianFeiRowId">
+			<div class="col-xs-5 col-lg-4">
+				<label for="" >是否服用过减肥药或其他减肥方法</label>
+			</div>
+			<div class="col-xs-5 col-lg-4">
+				<select flag ="select"  class="form-control" name="strJianFei" id="strJianFeiId">
+					<option value="false">否</option>
+					<option value="true">是</option>
+				</select>
+			</div>
+		</div>
+		<div class="row top">
+			<div class="col-xs-5 col-lg-4">
+				<label for="" >是否有尝试过晚上不吃饭或者只吃水果的方法</label>
+			</div>
+			<div class="col-xs-5 col-lg-4">
+				<select flag ="select"  class="form-control" name="strShuiGuo" id="strShuiGuoId">
+					<option value="false">否</option>
+					<option value="true">是</option>
+				</select>
+			</div>
+		</div>
+		<div class="row top">
+			<div class="col-xs-5 col-lg-4">
+				<label for="" >是否熬夜（超过11点均为熬夜）</label>
+			</div>
+			<div class="col-xs-5 col-lg-4">
+				<select flag ="select"  class="form-control" name="strAoYe" id="strAoYeId">
+					<option value="false">否</option>
+					<option value="true">是</option>
+				</select>
+			</div>
+		</div>
+		<div class="row top">
+			<div class="col-xs-5 col-lg-4">
+				<label for="" >是否嗜酒</label>
+			</div>
+			<div class="col-xs-5 col-lg-4">
+				<select flag ="select"  class="form-control" name="strShiJiu" id="strShiJiuId">
+					<option value="false">否</option>
+					<option value="true">是</option>
+				</select>
+			</div>
+		</div>
+		<div class="row top" id="bianMiRowId">
+			<div class="col-xs-5 col-lg-4">
+				<label for="" >是否便秘（一天保证一次）</label>
+			</div>
+			<div class="col-xs-5 col-lg-4">
+				<select flag ="select"  class="form-control" name="strBianMi" id="strBianMiId">
+					<option value="false">否</option>
+					<option value="true">是</option>
+				</select>
+			</div>
+		</div>	
+
+		<div class="row top" id="xueYaRowId">
+			<div class="col-xs-5 col-lg-4">
+				<label for="" >是否有低血压或者高血压</label>
+			</div>
+			<div class="col-xs-5 col-lg-4">
+				<select flag ="select"  class="form-control" name="strGaoXueYa" id="strGaoXueYaId">
+					<option value="false">否</option>
+					<option value="true">是</option>
+				</select>
+			</div>
+		</div>
+		<div class="row top" id="tangNiaoBingRowId">
+			<div class="col-xs-5 col-lg-4">
+				<label for="" >是否有低血糖或者糖尿病</label>
+			</div>
+			<div class="col-xs-5 col-lg-4">
+				<select flag ="select"  class="form-control" name="strTangNiaoBing" id="strTangNiaoBingId">
+					<option value="false">否</option>
+					<option value="true">是</option>
+				</select>
+			</div>
+		</div>	
+		<div class="row top" id="pingXueRowId">
+			<div class="col-xs-5 col-lg-4">
+				<label for="" >是否患有贫血</label>
+			</div>
+			<div class="col-xs-5 col-lg-4">
+				<select flag ="select"  class="form-control" name="strPinXue" id="strPinXueId">
+					<option value="false">否</option>
+					<option value="true">是</option>
+				</select>
+			</div>
+		</div>
+		<div class="row top">
+			<div class="col-xs-5 col-lg-4">
+				<label for="" >是否有肠炎胃炎等疾病</label>
+			</div>
+			<div class="col-xs-5 col-lg-4">
+				<select flag ="select"  class="form-control" name="strChangWeiYan" id="strChangWeiYanId">
+					<option value="false">否</option>
+					<option value="true">是</option>
+				</select>
+			</div>
+		</div>
+		<div class="row top" id="zhiFangGanRowId">
+			<div class="col-xs-5 col-lg-4">
+				<label for="" >是否患有甲状腺、多囊、脂肪肝及其他疾病史</label>
+			</div>
+			<div class="col-xs-5 col-lg-4">
+				<select flag ="select"  class="form-control" name="strZhiFangGan" id="strZhiFangGanId">
+					<option value="false">否</option>
+					<option value="true">是</option>
+				</select>
+			</div>
+		</div>
+		<div class="row top">
+			<div class="col-xs-5 col-lg-4">
+				<label for="" >疗程期间是否会加入运动</label>
+			</div>
+			<div class="col-xs-5 col-lg-4">
+				<select flag ="select"  class="form-control" name="strYunDong" id="strYunDongId">
+					<option value="false">否</option>
+					<option value="true">是</option>
+				</select>
+			</div>
+		</div>	
+		<div class="row top">
+			<div class="col-xs-5 col-lg-4">
+				<label for="" >是否属于易水肿体质</label>
+			</div>
+			<div class="col-xs-5 col-lg-4">
+				<select flag ="select"  class="form-control" name="strShuiZhong" id="strShuiZhongId">
+					<option value="false">否</option>
+					<option value="true">是</option>
+				</select>
+			</div>
+		</div>	
+	
+		<div class="row top">
+			<div class="col-xs-5 col-lg-4">
+				<label for="" >是否痛经</label>
+			</div>
+			<div class="col-xs-5 col-lg-4">
+				<select flag ="select"  class="form-control" name="strTongJing" id="strTongJingId">
+					<option value="false">否</option>
+					<option value="true">是</option>
+				</select>
+			</div>
+		</div>
+		<div class="row top" id="">
+			<div class="col-xs-10 col-lg-8">
+				<div class="input-group input-group-sm">
+					<span class="input-group-addon" id="">月经周期天数</span>
+					<input type="text" name="strYueJingZhouQi" class="form-control" placeholder="" aria-describedby="basic-addon1" >
+				</div>
+			</div>
+		</div>
+		<div class="row top" id="">
+			<div class="col-xs-10 col-lg-8">
+				<div class="input-group input-group-sm">
+					<span class="input-group-addon" id="">上次月经时间</span>
+					<input type="text" name="strShangCiYueJing" id="yueJingId" class="form-control" placeholder="" aria-describedby="basic-addon1" >
+				</div>
+			</div>
+		</div>
+		<div class="row top">
+			<div class="jumbotron">
+			  <h4>注明：</h4>
+			  <h4>点击确认，即代表同意为其安排专业的金牌售后进行二对一服务。</h4>
+			  <h4>请在疗程开始后，积极配合售后工作，否则不予保证瘦身效果。</h4>
+			  <h4>请确认以上信息准确无误，便于森米金牌售后为您量身制定科学的瘦身方案。</h4>
+			</div>
+		</div>
+		<div class="row top" id="">
+			<center>
+				<input class="btn  btn-large btn-primary"" id="submitId" type="submit" value="确认">
+			</center>
+		</div>
+	</form>
+</div>
+</div>
+</body>
+</html>

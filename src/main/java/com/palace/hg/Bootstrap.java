@@ -32,6 +32,8 @@ public class Bootstrap extends JFinalConfig {
 	 */
 	public void configRoute(Routes me) {
 		me.add("/cus", UserService.class);
+		me.add("/", Index.class);
+		
 	}
 	
 	public void configEngine(Engine me) {
