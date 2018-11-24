@@ -34,7 +34,7 @@ public class EmbedTomcat {
 		filter.setTldSkip(jars);
 		context.getJarScanner().setJarScanFilter(filter);
     	tom.start();
-    	Thread.currentThread().sleep(50*60*1000);
+    	Thread.currentThread().sleep(500*60*1000);
     }
 	
 	public static String getJars() {

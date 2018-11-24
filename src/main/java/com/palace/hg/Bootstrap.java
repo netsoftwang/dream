@@ -31,11 +31,15 @@ public class Bootstrap extends JFinalConfig {
 	 * 配置路由
 	 */
 	public void configRoute(Routes me) {
-		me.add("/cus", UserService.class);
+		me.add("/cus", UserService.class,"/");
+		me.add("/login", LoginService.class,"/");
+		me.add("/", Index.class);
+		me.setBaseViewPath("/");
+		
 	}
 	
 	public void configEngine(Engine me) {
-		//me.addSharedFunction("/common/_paginate.html");
+		//me.setBaseTemplatePath("/");
 	}
 	
 	/**

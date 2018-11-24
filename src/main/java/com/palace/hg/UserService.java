@@ -19,6 +19,12 @@ public class UserService  extends Controller {
 	private static final long serialVersionUID = 1L;
     String[] colArr = "lId,strUserName,strPhone,lHeight,lWeight,lBMI,lWantWeight,lXiongWei,lShouBi,lDaTui,lXiaoTui,strJianFei,strStartTime,strEndTime,strProductName,strShuiGuo,strAoYe,strShiJiu,strBianMi,strBianMiTianShu,strGaoXueYa,strZuiGaoXueYa,strZuiDiXueYa,strTangNiaoBing,strXueTangZhi,strPinXue,strXueHongDanBai,strChangWeiYan,strZhiFangGan,strZhiFangGanNeiRong,strYunDong,strShuiZhong,strTongJing,strShangCiYueJing,strYueJingZhouQi,strWuChan,strYinShui,strMsg,dtCreateTime".split(",");
     
+    
+    public void index() {
+    	render ( "index.html" ); 
+    }
+    
+    
     public String[] getCusColArr() {
     	List<Map<String,Object>> list = Db.query("SELECT COLUMN_NAME as col from information_schema.`COLUMNS` mm where mm.TABLE_NAME=?","cus");
     	return list.toArray(new String[list.size()]);
