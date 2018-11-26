@@ -8,7 +8,7 @@
 <link type="text/css" href="css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
 <style type="text/css">
 	body {
-		background: #c1e1e1;
+		background-image:url(images/leon.png); background-repeat:repeat; font-size:12px; font-family:'Microsoft YaHei',sans-serif; line-height:20px; font-smooth:always;
 	}
 	.top { margin-bottom: 10px; }
 	.middle {
@@ -407,9 +407,26 @@ function xueYa(val){
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 <div class="container">
-<div class="page-header">
-  <h1>welcome come </h1>
+	<nav class="navbar navbar-default" style="margin-top:8%">
+	  <div class="container-fluid">
+	    <div class="navbar-header">
+	      <a class="navbar-brand" href="welcome.html">
+	      	首页
+	      </a>
+	      <a class="navbar-brand" href="exam.html">
+	      	案例
+	      </a>
+	      <a class="navbar-brand" href="user.html">
+	      	联系
+	      </a>
+	      <a class="navbar-brand" href="about.html">
+	      	关于
+	      </a>
+	    </div>
+	  </div>
+	</nav>
 </div>
+<div class="container">
 <div>
 	<form action="" style="margin-top:20px" id="formId">
 		<div class="row top">
@@ -692,13 +709,17 @@ function xueYa(val){
 			</div>
 		</div>
 		<div class="row top">
-			<div class="row top" id="">
-				<h5>注明：点击确认，即代表同意为其安排专业的金牌售后进行二对一服务。</h5>
-				<h5>请在疗程开始后，积极配合售后工作，否则不予保证瘦身效果。</h5>
-				<h5>请确认以上信息准确无误，便于森米金牌售后为您量身制定科学的瘦身方案。</h5>
+			<div class="jumbotron">
+			  <h4>注明：</h4>
+			  <h4>点击确认，即代表同意为其安排专业的金牌售后进行二对一服务。</h4>
+			  <h4>请在疗程开始后，积极配合售后工作，否则不予保证瘦身效果。</h4>
+			  <h4>请确认以上信息准确无误，便于森米金牌售后为您量身制定科学的瘦身方案。</h4>
 			</div>
+		</div>
 		<div class="row top" id="">
-			<input class="btn btn-default" id="submitId" type="submit" value="确认">
+			<center>
+				<input class="btn  btn-large btn-primary"" id="submitId" type="submit" value="确认">
+			</center>
 		</div>
 	</form>
 </div>
